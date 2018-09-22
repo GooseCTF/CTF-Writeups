@@ -11,7 +11,7 @@
 This is a classic buffer overflow, made more interesting by space constraints.
 
 The description heavily hints at storing shellcode in linked lists.
-let's first see what we're dealing with.
+Let's first see what we're dealing with.
 ```sh
 $ pwn checksec shellpointcode
     Arch:     amd64-64-little
@@ -40,8 +40,8 @@ It's a long shot, but let's check it out.
 |   sym.goodbye ();
 |           ; var char *s @ rbp-0x3
 # ...
-|			0x000008c3      488d45fd       lea rax, qword [s]
-|			0x000008c7      be20000000     mov esi, 0x20               ; "@" ; int size
+|           0x000008c3      488d45fd       lea rax, qword [s]
+|           0x000008c7      be20000000     mov esi, 0x20               ; "@" ; int size
 |           0x000008cc      4889c7         mov rdi, rax                ; char *s
 |           0x000008cf      e80cfeffff     call sym.imp.fgets          ; char *fgets(char *s, int size, FILE *stream)
 # ...
@@ -242,6 +242,5 @@ $ ls
 flag.txt
 shellpointcode
 $ cat flag.txt
+flag{NONONODE_YOU_WRECKED_BRO}
 ```
-#### Flag
-`flag{NONONODE_YOU_WRECKED_BRO}`
