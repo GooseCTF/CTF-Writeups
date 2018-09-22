@@ -102,8 +102,7 @@ At this point, we only have 20 bytes left.
 The shortest [known `execve(/bin/sh)` shellcode](https://www.exploit-db.com/exploits/41750/) is 21 bytes.
 
 Abandoning this idea, the next best place to put shellcode seems to
-be in the buffers we fill right before the address is leaked:
-the program even prints their sizes; the hint could not be more transparent.
+be in the buffers we fill right before the address is leaked.
 This happens in `sym.nononode`:
 ```asm
 / (fcn) sym.nononode 119
@@ -158,7 +157,7 @@ After quickly checking `sym.readline`, we concede that there is no overflow ther
 |           0x000008a6      c9             leave
 \           0x000008a7      c3             ret
 ```
-We are not too saddened by this: we already have an overflow site.
+We are not too saddened by the fact: we already have an overflow site.
 The stack layout in `sym.nononode` is this:
 ```
   ----------- <- rbp
@@ -180,10 +179,12 @@ the `0xf` passed to `sym.readline` limits us to 15 bytes stored per buffer.
 
 This is exactly the linked list hinted at in the description! It all comes together.
 The recipe for success at this point is clear:
+
 1. Split shellcode into two parts, `shc1` and `shc2`, with a jump from `shc1` to `shc2`.
 2. Store the two parts in `buf_1` and `buf_2`.
 3. Overwrite the return address in `sym.goodbye` with the start address of `buf_1`.
-This is accompished with the following `pwnlib`-based code:
+
+This is accompished with this `pwnlib`-based code:
 ```python
 from pwn import *
 
