@@ -12,7 +12,7 @@ This is a classic buffer overflow, made more interesting by space constraints.
 
 The description heavily hints at storing shellcode in linked lists.
 let's first see what we're dealing with.
-```
+```sh
 $ pwn checksec shellpointcode
     Arch:     amd64-64-little
     RELRO:    Partial RELRO
@@ -22,7 +22,7 @@ $ pwn checksec shellpointcode
 ```
 No canary, RWX stack: no surprises here. This is a stack overflow alright.
 Do we, perhaps, have a handy `gets` call to complete the combo?
-```
+```asm
 $ r2 -AA shellpointcode
 # ...
 [0x00000720]> f | grep gets
@@ -30,12 +30,12 @@ $ r2 -AA shellpointcode
 0x000006e0 6 sym.imp.fgets
 ```
 No, that would be too easy. We do have a call to `fgets` though:
-```
+```asm
 [0x00000720]> axt @ sym.imp.fgets
 sym.goodbye 0x8cf [CALL] call sym.imp.fgets
 ```
 It's a long shot, but let's check it out.
-```
+```asm
 / (fcn) sym.goodbye 71
 |   sym.goodbye ();
 |           ; var char *s @ rbp-0x3
@@ -97,15 +97,15 @@ that are not storing the return address. This turns out to be too few.
 Since the shellcode will be split, we will need to make a relative jump, which will
 eat two bytes. Also, rsp is too close after leave: after just one 8-byte push
 further pushes will start overwriting shellcode in the upper 13-byte region!
-Adjusting `rsp` will take at least another two bytes. At this point, we only have
-20 bytes left. The shortest [known `execve(/bin/sh)` shellcode]
-(https://www.exploit-db.com/exploits/41750/) on x86_64 is 21 bytes.
+Adjusting `rsp` will take at least another two bytes.
+At this point, we only have 20 bytes left.
+The shortest [known `execve(/bin/sh)` shellcode](https://www.exploit-db.com/exploits/41750/) is 21 bytes.
 
 Abandoning this idea, the next best place to put shellcode seems to
 be in the buffers we fill right before the address is leaked:
 the program even prints their sizes; the hint could not be more transparent.
 This happens in `sym.nononode`:
-```
+```asm
 / (fcn) sym.nononode 119
 |   sym.nononode ();
 |           ; var int local_40h @ rbp-0x40
@@ -126,7 +126,7 @@ This happens in `sym.nononode`:
 # ...
 ```
 After quickly checking `sym.readline`, we concede that there is no overflow there:
-```
+```asm
 / (fcn) sym.readline 76
 |   sym.readline (char *arg1, size_t arg2);
 |           ; var size_t local_20h @ rbp-0x20
