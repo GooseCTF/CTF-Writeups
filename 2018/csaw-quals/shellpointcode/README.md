@@ -8,11 +8,10 @@
 > 
 
 ## Write-up
-This is a simple classic buffer overflow,
-made more interesting by space constraints.
+This is a classic buffer overflow, made more interesting by space constraints.
 
 The description heavily hints at storing shellcode in linked lists.
-Nevertheless, let's first see what we're dealing with.
+let's first see what we're dealing with.
 ```
 $ pwn checksec shellpointcode
     Arch:     amd64-64-little
@@ -179,6 +178,7 @@ The stack layout in `sym.nononode` is as follows:
 Though `buf_1` and `buf_2` are large enough individually to hold all of our shellcode,
 the `0xf` passed to `sym.readline` limits us to 15 bytes stored per buffer.
 
+This is exactly the linked list hinted at in the description! It all comes together.
 The recipe for success at this point is clear:
 1. Split shellcode into two parts, `shc1` and `shc2`, with a jump from `shc1` to `shc2`.
 2. Store the two parts in `buf_1` and `buf_2`.
