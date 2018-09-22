@@ -2,10 +2,10 @@
 
 | Category | Points |
 |:---------|-------:|
-| pwn      | 200    |
+| pwn      | 100    |
 
 ### Description
-> 
+> Linked lists are great! They let you chain pieces of data together.
 
 ## Write-up
 This is a classic buffer overflow, made more interesting by space constraints.
