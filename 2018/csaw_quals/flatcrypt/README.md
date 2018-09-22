@@ -1,4 +1,4 @@
-# challenge_name
+# flatcrypt
 
 ## Challenge details
 | Category | Points |
@@ -107,7 +107,7 @@ _logo
 a_logo  # Success! No longer in a loop!
 ...
 ```
-####
+#### Flag
 ```
 crime_doesnt_have_a_logo
 ```
