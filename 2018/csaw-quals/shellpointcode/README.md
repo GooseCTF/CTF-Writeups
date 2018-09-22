@@ -71,7 +71,7 @@ Thanks
 ```
 There's the leak. Could we compute the offset to `s` in `goodbye` from there?
 Sure. This is the route we initally went down, but it turned out to be
-fruitless, because of how the frame structure in `goodbye`:
+fruitless, because of the frame structure in `goodbye`:
 ```
 -----------
            |
@@ -159,7 +159,7 @@ After quickly checking `sym.readline`, we concede that there is no overflow ther
 \           0x000008a7      c3             ret
 ```
 We are not too saddened by this: we already have an overflow site.
-The stack layout in `sym.nononode` is as follows:
+The stack layout in `sym.nononode` is this:
 ```
   ----------- <- rbp
   |         |
