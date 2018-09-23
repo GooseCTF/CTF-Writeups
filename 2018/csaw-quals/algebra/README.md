@@ -1,4 +1,4 @@
-# challenge_name
+# algebra
 
 ## Challenge details
 | Category | Points |
