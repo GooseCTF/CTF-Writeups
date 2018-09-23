@@ -1,4 +1,4 @@
-# challenge_name
+# Take an L
 
 ## Challenge details
 | Category | Points |
