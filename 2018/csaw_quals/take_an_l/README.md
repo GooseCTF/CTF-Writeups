@@ -24,6 +24,70 @@ The solution is simple enough to express recursively:
   used for the tiling marked. Now all quadrants  are `2^k x 2^k`
   and contain one mark, so they can be tiled recursively.
 
+For example:
+```
+Start with
+* * * * | * * * *
+* * * * | * * * *
+* * X * | * * * *
+* * * * | * * * *
+-----------------
+* * * * | * * * *
+* * * * | * * * *
+* * * * | * * * *
+* * * * | * * * *
+
+Tile an L:
+* * * * | * * * *
+* * * * | * * * *
+* * X * | * * * *
+* * * * | 1 * * *
+-----------------
+* * * 1 | 1 * * *
+* * * * | * * * *
+* * * * | * * * *
+* * * * | * * * *
+
+Recurse: 
+* * | * *       * * | * *
+* * | * *       * 2 | 2 *
+---------   =>  ---------
+* * | X *       * 2 | X *
+* * | * *       * * | * *
+
+* * | * *       * * | * *
+* * | * *       * 3 | 3 *
+---------   =>  ---------
+* * | * *       * * | 3 *
+1 * | * *       1 * | * *
+
+* * | * 1       * * | * 1
+* * | * *       * 4 | * *
+---------   =>  ---------
+* * | * *       * 4 | 4 *
+* * | * *       * * | * *
+
+1 * | * *       1 * | * *
+* * | * *       * * | 5 *
+---------   =>  ---------
+* * | * *       * 5 | 5 *
+* * | * *       * * | * *
+
+Recurse again.
+* *   =>  6 6
+* 2   =>  6 2
+
+* *   =>  7 7
+2 *   =>  2 7
+
+* 2   =>  8 2
+* *   =>  8 8
+
+X *   =>  X 9
+* *   =>  9 9
+
+... and similarly for the other three 4x4 squares.
+```
 The implementation is in `tile.c` and `takel.py`, invoked as:
 ```sh
 $ gcc -O2 tile.c -o tile
