@@ -58,7 +58,7 @@ void tile(int sz, struct point mark, struct point cur) {
 
   // the quadrant that contains the old mark is untouched
   // for the rest, tile an L with one cell in each quadrant
-  // and make these cell their marks
+  // and make these cells their marks
   if (mark.x < mid.x && mark.y < mid.y) {
     tl = mark;
     tr = bl = br = mid;
