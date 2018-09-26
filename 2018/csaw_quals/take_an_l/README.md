@@ -19,10 +19,10 @@ The solution is simple enough to express recursively:
 - base case: a `2 x 2` square with a mark is tiled in the obvious way
 - inductive step: if a `2^k x 2^k` square with a mark can be tiled,
   we tile a `2^(k + 1) x 2^(k + 1)` square by splitting it into four
-  `2^k x 2^k` quadrants and tiling an L into quadrants which do not contain
-  a mark already so that each contains exactly one cell comprising the L.
-  We designate these cells as marks for the respective quadrants,
-  and now every quadrant can be tiled.
+  `2^k x 2^k` quadrants and tiling an L with one cell in each
+  quadrant except the one with the mark. Consider the cells
+  used for the tiling marked. Now all quadrants  are `2^k x 2^k`
+  and contain one mark, so they can be tiled recursively.
 
 The implementation is in `tile.c` and `takel.py`, invoked as:
 ```sh
